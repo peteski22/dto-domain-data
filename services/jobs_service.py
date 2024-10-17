@@ -1,41 +1,31 @@
 import uuid
+from typing import Optional
 
 from domain.jobs import Job, Status
+from repository.jobs_repository import JobsRepository
 
 
 class JobsService:
-    """Would usually be the service that deals with the presentation layer and the repository layer.
-
-    e.g. Saving jobs to the DB, getting jobs from the DB.
-
-    Here is where we would deal with the 'domain' objects.
-    'controllers' would map domain objects to DTOs (and vice versa)
-    'repositories' would map domain objects to Data (entity) types and vice versa.
-    """
+    def __init__(self, repository: JobsRepository):
+        self.repository = repository
 
     def get_jobs(self) -> [Job]:
-        jobs = [
-            Job(
-                name="job1",
-                id="7e8afeac-1c49-4ba9-a0b9-c13f08a7b454",
-                status=Status.Failed,
-            ),
-            Job(
-                name="job2",
-                id="6f4d1d75-d863-4ea4-9419-6c3a2aa86b4f",
-                status=Status.Pending,
-            ),
-            Job(
-                name="job3",
-                id="2c886f69-21bc-4edf-88a6-1e599dd7f2c6",
-                status=Status.Completed,
-            ),
-        ]
+        jobs = self.repository.get_jobs()
         return jobs
 
-    def get_job(self, job_id: uuid.UUID) -> Job | None:
-        for job in self.get_jobs():
-            if job.id == job_id:
-                return job
+    def get_job(self, job_id: uuid.UUID) -> Optional[Job]:
+        job = self.repository.get_job(job_id)
 
-        return None
+        return job
+
+    def create_job(self, name: str) -> Job:
+        job = Job(id=uuid.uuid4(), name=name, status=Status.Pending)
+        self.repository.create_job(job)
+        return job
+
+    def update_job(self, job: Job) -> Optional[Job]:
+        data = self.repository.get_job(job.id)
+        if data is None:
+            return None
+
+        return self.repository.update_job(job)

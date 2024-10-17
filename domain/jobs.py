@@ -12,7 +12,7 @@ class Status(str, Enum):
 
 @dataclass()
 class Job:
-    def __init__(self, id: str, name: str, status: Status):
-        self.id = uuid.UUID(id)
+    def __init__(self, id: uuid.UUID, name: str, status: Status):
+        self.id = id
         self.name = name
         self.status = status
