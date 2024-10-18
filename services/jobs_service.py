@@ -2,7 +2,7 @@ import uuid
 from typing import Optional
 
 from domain.jobs import Job, Status
-from repository.jobs_repository import JobsRepository
+from repositories.jobs_repository import JobsRepository
 
 
 class JobsService:

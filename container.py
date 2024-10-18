@@ -1,7 +1,7 @@
 from dependency_injector import containers, providers
 
 from services.jobs_service import JobsService
-from repository.jobs_repository import JobsRepository
+from repositories.jobs_repository import JobsRepository
 
 
 class AppContainer(containers.DeclarativeContainer):
